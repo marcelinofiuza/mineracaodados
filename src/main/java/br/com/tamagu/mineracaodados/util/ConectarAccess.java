@@ -20,7 +20,7 @@ public class ConectarAccess {
 
     public static Tabelao getDadosTabelao() throws IOException {
 
-        Table tb = DatabaseBuilder.open(new File("TABELAO.mdb")).getTable("tabelao");
+        Table tb = DatabaseBuilder.open(new File("/TABELAO.mdb")).getTable("tabelao");
 
         for (Row row : tb) {
             System.out.println("Column 'a' has value: " + row.get("a"));

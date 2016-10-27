@@ -33,7 +33,6 @@ public class Minerar {
         Categoria categoria;
 
         
-        
         try {
 
             //Carregar arquivo MDB

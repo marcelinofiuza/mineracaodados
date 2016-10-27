@@ -5,15 +5,10 @@
  */
 package br.com.tamagu.mineracaodados.util;
 
-import br.com.tamagu.mineracaodados.entidades.Tabelao;
 import com.healthmarketscience.jackcess.DatabaseBuilder;
-import com.healthmarketscience.jackcess.Row;
 import com.healthmarketscience.jackcess.Table;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -21,24 +16,10 @@ import java.util.List;
  */
 public class ConectarAccess {
 
-    public static Iterator<Tabelao> getDadosTabelao() throws IOException {
+    public static Table getDadosTabelao() throws IOException {
                 
         Table tb = DatabaseBuilder.open(new File(System.getProperty("user.dir")+"/src/main/resources/TABELAO.MDB")).getTable("tabelao");
-
+        return tb;
         
-        List<Tabelao> listaTabelao = new ArrayList();
-        
-        for (Row row : tb) {
-            Tabelao tabelao = new Tabelao();
-            
-            tabelao.setCategorias_codigodacategoria(row.getInt("CATEGORIAS_CodigoDaCategoria"));            
-            tabelao.setNomedacategoria(row.getString("NomeDaCategoria"));
-            tabelao.setDescricao(row.getString("Descricao"));
-                                 
-            listaTabelao.add(tabelao);            
-        }
-                
-        return listaTabelao.iterator();
-
     }
 }

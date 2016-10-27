@@ -7,7 +7,6 @@ package br.com.tamagu.mineracaodados.controle;
 
 import br.com.tamagu.mineracaodados.entidades.Tabelao;
 import br.com.tamagu.mineracaodados.util.ConectarAccess;
-import com.healthmarketscience.jackcess.Row;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

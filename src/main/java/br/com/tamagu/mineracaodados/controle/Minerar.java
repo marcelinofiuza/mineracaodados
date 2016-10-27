@@ -8,6 +8,7 @@ package br.com.tamagu.mineracaodados.controle;
 import br.com.tamagu.mineracaodados.entidades.Tabelao;
 import br.com.tamagu.mineracaodados.util.ConectarAccess;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,9 +22,17 @@ public class Minerar {
 
         try {
             
-            Tabelao tabelao = (Tabelao) ConectarAccess.getDadosTabelao();
+            Iterator<Tabelao> tabelao = ConectarAccess.getDadosTabelao();
 
-
+            
+            for (Iterator iterator = tabelao; iterator.hasNext();) {
+                
+                
+                
+                                
+            }
+                    
+                    
         } catch (IOException ex) {
             Logger.getLogger(Minerar.class.getName()).log(Level.SEVERE, null, ex);
         }

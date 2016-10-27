@@ -97,9 +97,8 @@ public class Tabelao implements Serializable {
     private String transportadoras_telefone;
 
     
-    
-    
-    
+    public Tabelao() {
+    }
     
     public int getCategorias_codigodacategoria() {
         return categorias_codigodacategoria;

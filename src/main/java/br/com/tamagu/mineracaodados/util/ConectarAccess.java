@@ -11,6 +11,9 @@ import com.healthmarketscience.jackcess.Row;
 import com.healthmarketscience.jackcess.Table;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -18,16 +21,24 @@ import java.io.IOException;
  */
 public class ConectarAccess {
 
-    public static Tabelao getDadosTabelao() throws IOException {
+    public static Iterator<Tabelao> getDadosTabelao() throws IOException {
+                
+        Table tb = DatabaseBuilder.open(new File(System.getProperty("user.dir")+"/src/main/resources/TABELAO.MDB")).getTable("tabelao");
 
-        Table tb = DatabaseBuilder.open(new File("/TABELAO.mdb")).getTable("tabelao");
-
+        
+        List<Tabelao> listaTabelao = new ArrayList();
+        
         for (Row row : tb) {
-            System.out.println("Column 'a' has value: " + row.get("a"));
+            Tabelao tabelao = new Tabelao();
+            
+            tabelao.setCategorias_codigodacategoria(row.getInt("CATEGORIAS_CodigoDaCategoria"));            
+            tabelao.setNomedacategoria(row.getString("NomeDaCategoria"));
+            tabelao.setDescricao(row.getString("Descricao"));
+                                 
+            listaTabelao.add(tabelao);            
         }
                 
-        Tabelao tabelao = new Tabelao();
-        return tabelao;
+        return listaTabelao.iterator();
 
     }
 }

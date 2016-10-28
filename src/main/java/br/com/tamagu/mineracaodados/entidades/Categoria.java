@@ -5,12 +5,21 @@
  */
 package br.com.tamagu.mineracaodados.entidades;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  *
  * @author marce
  */
-public class Categoria {
-    
+@Entity
+public class Categoria implements Serializable {
+        
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int codigo;
     private String nome;
     private String descricao;

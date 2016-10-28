@@ -6,14 +6,12 @@
 package br.com.tamagu.mineracaodados.controle;
 
 import br.com.tamagu.mineracaodados.entidades.Categoria;
-import br.com.tamagu.mineracaodados.entidades.Tabelao;
+import br.com.tamagu.mineracaodados.servico.ServicoCategoria;
 import br.com.tamagu.mineracaodados.util.ConectarAccess;
 import com.healthmarketscience.jackcess.Row;
 import com.healthmarketscience.jackcess.Table;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,11 +47,21 @@ public class Minerar {
                 listaCategoria.put(categoria.getCodigo(), categoria);
                                 
             }
+                                   
             
+            //ServicoCategoria SC = new ServicoCategoria();
+            ServicoCategoria SC = new ServicoCategoria(null);
             
-
-            System.out.println("teste");
-            
+            try {
+                
+                for (Map.Entry<Integer, Categoria> entrySet : listaCategoria.entrySet()) {
+                    Categoria value = entrySet.getValue();                
+                    SC.criar(value);
+                }
+                                
+            } catch (Exception ex) {
+                Logger.getLogger(Minerar.class.getName()).log(Level.SEVERE, null, ex);
+            }                        
             
         } catch (IOException ex) {
             Logger.getLogger(Minerar.class.getName()).log(Level.SEVERE, null, ex);

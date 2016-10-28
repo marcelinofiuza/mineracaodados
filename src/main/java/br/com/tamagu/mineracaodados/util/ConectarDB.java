@@ -9,23 +9,34 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 
 /**
  *
+ * @see http://stackoverflow.com/questions/15279184/why-different-persistence-units-with-separated-data-sources-query-the-same-data
  * @author Jedi
  */
 public class ConectarDB {
 
+//    @PersistenceContext(unitName="ormMineracao", type=PersistenceContextType.TRANSACTION)
+//    private EntityManagerFactory factoryMySQL;
+//        
+//    @PersistenceContext(unitName="ormMineracao", type=PersistenceContextType.TRANSACTION)
+//    private EntityManagerFactory factoryOracle;
+    
     private EntityManagerFactory factory;
     private EntityManager manager;
     private EntityTransaction transaction;
+    
+    
+    public ConectarDB(String nomeBanco) throws Exception{
+        try {
+            factory = Persistence.createEntityManagerFactory(nomeBanco);
+        } catch (Exception e) {
+            throw new Exception("Erro ao selecionar banco de dados!");
+        }
 
-    public ConectarDB() {
-        factory = Persistence.createEntityManagerFactory("ormMineracao");
-    }
-
-    public ConectarDB(String nomeBanco) {
-        factory = Persistence.createEntityManagerFactory(nomeBanco);
     }
 
     public void beginTransaction() {
@@ -33,11 +44,11 @@ public class ConectarDB {
         transaction = manager.getTransaction();
         transaction.begin();
     }
-        
-    public EntityManagerFactory getFactory(){
+
+    public EntityManagerFactory getFactory() {
         return factory;
     }
-    
+
     public EntityManager getManager() {
         return manager;
     }
@@ -46,12 +57,12 @@ public class ConectarDB {
         return transaction;
     }
 
-    public void rollBackTransaction(){
+    public void rollBackTransaction() {
         transaction.rollback();
         manager.close();
 //        factory.close();
     }
-    
+
     public void endTransaction() {
         transaction.commit();
         manager.close();

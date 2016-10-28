@@ -13,27 +13,26 @@ import javax.persistence.Id;
 
 /**
  *
- * @author marce
+ * @author Jedi
  */
 @Entity
 public class Categoria implements Serializable {
-        
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int codigo;
+    private int idCategoria;
     private String nome;
     private String descricao;
 
-    
     public Categoria() {
     }
 
-    public int getCodigo() {
-        return codigo;
+    public int getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public String getNome() {
@@ -51,5 +50,5 @@ public class Categoria implements Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-               
+
 }

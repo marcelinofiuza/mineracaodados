@@ -11,9 +11,9 @@ import br.com.tamagu.mineracaodados.util.PersistenciaTmg;
  *
  * @author Jedi
  */
-public class ServicoCategoria extends PersistenciaTmg{
+public class ServicoFornecedor extends PersistenciaTmg{
 
-    public ServicoCategoria(String orm) throws Exception {        
+    public ServicoFornecedor(String orm) throws Exception {        
         super(orm);
     }
         

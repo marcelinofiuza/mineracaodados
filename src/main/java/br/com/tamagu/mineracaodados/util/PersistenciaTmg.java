@@ -19,9 +19,9 @@ public class PersistenciaTmg implements Serializable {
 
     private ConectarDB conexao;
 
-    public PersistenciaTmg(String orm) {
+    public PersistenciaTmg(String orm) throws Exception {
         if (orm == null || orm.isEmpty()) {
-            conexao = new ConectarDB();
+            throw new Exception("Banco de dados não informado");
         } else {
             conexao = new ConectarDB(orm);
         }
@@ -42,7 +42,7 @@ public class PersistenciaTmg implements Serializable {
         }
     }
 
-    public void criar(Collection<Object> entidade) throws Exception {
+    public void criarLista(Collection entidade) throws Exception {
         try {
             conexao.beginTransaction();
 

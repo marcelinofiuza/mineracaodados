@@ -95,10 +95,5 @@ public class Minerar {
         } catch (IOException ex) {
             Logger.getLogger(Minerar.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }
-
-    public void setDadosCategoria() {
-
     }
 }

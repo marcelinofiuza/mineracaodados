@@ -20,11 +20,7 @@ import javax.persistence.PersistenceContextType;
 public class ConectarDB {
 
 //    @PersistenceContext(unitName="ormMineracao", type=PersistenceContextType.TRANSACTION)
-//    private EntityManagerFactory factoryMySQL;
-//        
-//    @PersistenceContext(unitName="ormMineracao", type=PersistenceContextType.TRANSACTION)
-//    private EntityManagerFactory factoryOracle;
-    
+//    private EntityManagerFactory factory;    
     private EntityManagerFactory factory;
     private EntityManager manager;
     private EntityTransaction transaction;
@@ -34,7 +30,8 @@ public class ConectarDB {
         try {
             factory = Persistence.createEntityManagerFactory(nomeBanco);
         } catch (Exception e) {
-            throw new Exception("Erro ao selecionar banco de dados!");
+            e.printStackTrace();
+            throw new Exception("Erro ao selecionar banco de dados! " + nomeBanco);
         }
 
     }

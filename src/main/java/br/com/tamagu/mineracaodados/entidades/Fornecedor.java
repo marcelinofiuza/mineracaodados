@@ -19,7 +19,6 @@ import javax.persistence.Id;
 public class Fornecedor implements Serializable{
     
     @Id
-//  @GeneratedValue(strategy = GenerationType.AUTO)    
     private int idFornecedor;
     
     private String nomeEmpresa;

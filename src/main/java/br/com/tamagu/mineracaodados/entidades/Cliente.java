@@ -19,7 +19,6 @@ import javax.persistence.Id;
 public class Cliente  implements Serializable{
     
     @Id
-//  @GeneratedValue(strategy = GenerationType.AUTO)    
     private String idCliente;    
  
     private String nomeDaEmpresa;

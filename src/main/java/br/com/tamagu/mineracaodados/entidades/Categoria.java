@@ -19,7 +19,6 @@ import javax.persistence.Id;
 public class Categoria implements Serializable {
 
     @Id
-//  @GeneratedValue(strategy = GenerationType.AUTO)
     private int idCategoria;
     private String nome;
     private String descricao;

@@ -9,11 +9,13 @@ import br.com.tamagu.mineracaodados.entidades.Categoria;
 import br.com.tamagu.mineracaodados.entidades.Cliente;
 import br.com.tamagu.mineracaodados.entidades.Empregado;
 import br.com.tamagu.mineracaodados.entidades.Fornecedor;
+import br.com.tamagu.mineracaodados.entidades.Produto;
 import br.com.tamagu.mineracaodados.entidades.Transportadora;
 import br.com.tamagu.mineracaodados.servico.ServicoCategoria;
 import br.com.tamagu.mineracaodados.servico.ServicoCliente;
 import br.com.tamagu.mineracaodados.servico.ServicoEmpregado;
 import br.com.tamagu.mineracaodados.servico.ServicoFornecedor;
+import br.com.tamagu.mineracaodados.servico.ServicoProduto;
 import br.com.tamagu.mineracaodados.servico.ServicoTransportadora;
 import br.com.tamagu.mineracaodados.util.ConectarAccess;
 import com.healthmarketscience.jackcess.Row;
@@ -42,6 +44,7 @@ public class Minerar {
         Map<String, Cliente> listaCliente = new HashMap<>();
         Map<Integer, Transportadora> listaTransportadora = new HashMap<>();
         Map<Integer, Empregado> listaEmpregado = new HashMap<>();
+        Map<Integer, Produto> listaProduto = new HashMap<>();
 
         //Entidades
         Categoria categoria;
@@ -50,6 +53,7 @@ public class Minerar {
         Transportadora transportadora;
         Empregado empregado;
         Empregado supervisor;
+        Produto produto;
 
         //Servicos
         ServicoCategoria servicoCategoria;
@@ -57,6 +61,7 @@ public class Minerar {
         ServicoCliente servicoCliente;
         ServicoTransportadora servicoTransportadora;
         ServicoEmpregado servicoEmpregado;
+        ServicoProduto servicoProduto;
 
         try {
 
@@ -138,27 +143,45 @@ public class Minerar {
                 }
                 listaEmpregado.put(empregado.getIdFuncionario(), empregado);
 
+                //Dados do Produto
+                produto = new Produto();
+                produto.setIdProduto(row.getInt("Produtos_CodigoDoProduto"));
+                produto.setNomeDoProduto(row.getString("NomeDoProduto"));
+                produto.setFornecedor(fornecedor); //Fornecedor já extraido a cima
+                produto.setCategoria(categoria); //Categoria já extraido a cima
+                produto.setQuantidadePorUnidade(row.getString("QuantidadePorUnidade"));
+                produto.setPrecoUnitario(row.getBigDecimal("Produtos_PrecoUnitario"));                
+                produto.setUnidadesEmEstoque(row.getShort("UnidadesEmEstoque"));                                
+                produto.setUnidadesPedidas(row.getShort("UnidadesPedidas"));
+                produto.setNivelDeReposicao(row.getShort("NivelDeReposicao"));
+                produto.setDescontinuado(row.getBoolean("Descontinuado"));
+                listaProduto.put(produto.getIdProduto(), produto);
+
             }
 
             try {
 
                 //Grava dos dados no banco
+                //Categoria
                 servicoCategoria = new ServicoCategoria(bancoDados);
                 servicoCategoria.criarLista(listaCategoria.values());
 
+                //Fornecedor
                 servicoFornecedor = new ServicoFornecedor(bancoDados);
                 servicoFornecedor.criarLista(listaFornecedor.values());
 
+                //Cliente
                 servicoCliente = new ServicoCliente(bancoDados);
                 servicoCliente.criarLista(listaCliente.values());
 
+                //Transportadora
                 servicoTransportadora = new ServicoTransportadora(bancoDados);
                 servicoTransportadora.criarLista(listaTransportadora.values());
 
+                //Empregado
                 servicoEmpregado = new ServicoEmpregado(bancoDados);
                 servicoEmpregado.criarLista(listaEmpregado.values());
 
-                
                 //Atribuir os supervisores aos empregados
                 for (Map.Entry<Integer, Empregado> entrySet : listaEmpregado.entrySet()) {
 
@@ -171,12 +194,15 @@ public class Minerar {
                         listaEmpregado.put(value.getIdFuncionario(), value);
                     }
                 }
+
                 //Grava os empregados com os supervisores
                 servicoEmpregado = new ServicoEmpregado(bancoDados);
-                servicoEmpregado.criarLista(listaEmpregado.values());                
+                servicoEmpregado.criarLista(listaEmpregado.values());
 
-                
-                
+                //Produto
+                servicoProduto = new ServicoProduto(bancoDados);
+                servicoProduto.criarLista(listaProduto.values());
+
             } catch (Exception ex) {
                 Logger.getLogger(Minerar.class.getName()).log(Level.SEVERE, null, ex);
             }

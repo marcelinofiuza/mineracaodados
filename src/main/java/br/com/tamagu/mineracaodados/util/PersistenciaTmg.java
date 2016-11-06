@@ -56,8 +56,7 @@ public class PersistenciaTmg implements Serializable {
             throw new Exception(e.getMessage());
 
         } finally {
-            conexao.endTransaction();
-            
+            conexao.endTransaction();            
         }
     }    
 

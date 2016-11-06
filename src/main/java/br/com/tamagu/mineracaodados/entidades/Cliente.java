@@ -16,54 +16,53 @@ import javax.persistence.Id;
  * @author Jedi
  */
 @Entity
-public class Fornecedor implements Serializable{
+public class Cliente  implements Serializable{
     
     @Id
 //  @GeneratedValue(strategy = GenerationType.AUTO)    
-    private int idFornecedor;
-    
-    private String nomeEmpresa;
-    private String nomeContato;
-    private String cargoContato;
+    private String idCliente;    
+ 
+    private String nomeDaEmpresa;
+    private String nomeDoContato;
+    private String cargoDoContato;
     private String endereco;
     private String cidade;
     private String regiao;
     private String cep;
     private String pais;
     private String telefone;
-    private String fax;
-    private String homepage;
+    private String fax;    
 
-    public int getIdFornecedor() {
-        return idFornecedor;
+    public String getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdFornecedor(int idFornecedor) {
-        this.idFornecedor = idFornecedor;
+    public void setIdCliente(String idCliente) {
+        this.idCliente = idCliente;
     }
 
-    public String getNomeEmpresa() {
-        return nomeEmpresa;
+    public String getNomeDaEmpresa() {
+        return nomeDaEmpresa;
     }
 
-    public void setNomeEmpresa(String nomeEmpresa) {
-        this.nomeEmpresa = nomeEmpresa;
+    public void setNomeDaEmpresa(String nomeDaEmpresa) {
+        this.nomeDaEmpresa = nomeDaEmpresa;
     }
 
-    public String getNomeContato() {
-        return nomeContato;
+    public String getNomeDoContato() {
+        return nomeDoContato;
     }
 
-    public void setNomeContato(String nomeContato) {
-        this.nomeContato = nomeContato;
+    public void setNomeDoContato(String nomeDoContato) {
+        this.nomeDoContato = nomeDoContato;
     }
 
-    public String getCargoContato() {
-        return cargoContato;
+    public String getCargoDoContato() {
+        return cargoDoContato;
     }
 
-    public void setCargoContato(String cargoContato) {
-        this.cargoContato = cargoContato;
+    public void setCargoDoContato(String cargoDoContato) {
+        this.cargoDoContato = cargoDoContato;
     }
 
     public String getEndereco() {
@@ -121,13 +120,5 @@ public class Fornecedor implements Serializable{
     public void setFax(String fax) {
         this.fax = fax;
     }
-
-    public String getHomepage() {
-        return homepage;
-    }
-
-    public void setHomepage(String homepage) {
-        this.homepage = homepage;
-    }
-            
+        
 }

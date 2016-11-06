@@ -17,7 +17,7 @@ public class PersistenciaTmg implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    private ConectarDB conexao;
+    protected ConectarDB conexao;
 
     public PersistenciaTmg(String orm) throws Exception {
         if (orm == null || orm.isEmpty()) {

@@ -7,17 +7,22 @@ package br.com.tamagu.mineracaodados.controle;
 
 import br.com.tamagu.mineracaodados.entidades.Categoria;
 import br.com.tamagu.mineracaodados.entidades.Cliente;
+import br.com.tamagu.mineracaodados.entidades.DetalhesPedido;
 import br.com.tamagu.mineracaodados.entidades.Empregado;
 import br.com.tamagu.mineracaodados.entidades.Fornecedor;
+import br.com.tamagu.mineracaodados.entidades.Pedido;
 import br.com.tamagu.mineracaodados.entidades.Produto;
 import br.com.tamagu.mineracaodados.entidades.Transportadora;
 import br.com.tamagu.mineracaodados.servico.ServicoCategoria;
 import br.com.tamagu.mineracaodados.servico.ServicoCliente;
+import br.com.tamagu.mineracaodados.servico.ServicoDetalhesPedido;
 import br.com.tamagu.mineracaodados.servico.ServicoEmpregado;
 import br.com.tamagu.mineracaodados.servico.ServicoFornecedor;
+import br.com.tamagu.mineracaodados.servico.ServicoPedido;
 import br.com.tamagu.mineracaodados.servico.ServicoProduto;
 import br.com.tamagu.mineracaodados.servico.ServicoTransportadora;
 import br.com.tamagu.mineracaodados.util.ConectarAccess;
+import br.com.tamagu.mineracaodados.util.PersistenciaTmg;
 import com.healthmarketscience.jackcess.Row;
 import com.healthmarketscience.jackcess.Table;
 import java.io.IOException;
@@ -45,6 +50,8 @@ public class Minerar {
         Map<Integer, Transportadora> listaTransportadora = new HashMap<>();
         Map<Integer, Empregado> listaEmpregado = new HashMap<>();
         Map<Integer, Produto> listaProduto = new HashMap<>();
+        Map<Integer, Pedido> listaPedido = new HashMap<>();
+        Map<Integer, DetalhesPedido> listaDetalhesPedido = new HashMap<>();
 
         //Entidades
         Categoria categoria;
@@ -54,6 +61,8 @@ public class Minerar {
         Empregado empregado;
         Empregado supervisor;
         Produto produto;
+        Pedido pedido;
+        DetalhesPedido detalhesPedido;
 
         //Servicos
         ServicoCategoria servicoCategoria;
@@ -62,13 +71,14 @@ public class Minerar {
         ServicoTransportadora servicoTransportadora;
         ServicoEmpregado servicoEmpregado;
         ServicoProduto servicoProduto;
+        ServicoPedido servicoPedido;
+        ServicoDetalhesPedido servicoDetalhesPedido;
 
         try {
 
 //            Object[] opcoes = {"ormMineracao", "ormVendas"};
 //            Object res = JOptionPane.showInputDialog(null, "Escolha um banco", "Selecao de itens",
-//                    JOptionPane.PLAIN_MESSAGE, null, opcoes, "");
-//                                                   
+//                    JOptionPane.PLAIN_MESSAGE, null, opcoes, "");                                                   
 //            bancoDados = res.toString();            
             //Carregar arquivo MDB
             Table tabelao = ConectarAccess.getDadosTabelao();
@@ -150,17 +160,46 @@ public class Minerar {
                 produto.setFornecedor(fornecedor); //Fornecedor já extraido a cima
                 produto.setCategoria(categoria); //Categoria já extraido a cima
                 produto.setQuantidadePorUnidade(row.getString("QuantidadePorUnidade"));
-                produto.setPrecoUnitario(row.getBigDecimal("Produtos_PrecoUnitario"));                
-                produto.setUnidadesEmEstoque(row.getShort("UnidadesEmEstoque"));                                
+                produto.setPrecoUnitario(row.getBigDecimal("Produtos_PrecoUnitario"));
+                produto.setUnidadesEmEstoque(row.getShort("UnidadesEmEstoque"));
                 produto.setUnidadesPedidas(row.getShort("UnidadesPedidas"));
                 produto.setNivelDeReposicao(row.getShort("NivelDeReposicao"));
                 produto.setDescontinuado(row.getBoolean("Descontinuado"));
                 listaProduto.put(produto.getIdProduto(), produto);
 
+                //Dados do pedido
+                pedido = new Pedido();
+                pedido.setNumeroDoPedido(row.getInt("Pedidos_NumeroDoPedido"));
+                pedido.setCliente(cliente);
+                pedido.setEmpregado(empregado);
+                pedido.setDataDoPedido(row.getDate("DataDoPedido"));
+                pedido.setDataDeEntrega(row.getDate("DataDeEntrega"));
+                pedido.setDataDeEnvio(row.getDate("DataDeEnvio"));
+                pedido.setTransportadora(transportadora);
+                pedido.setFrete(row.getBigDecimal("Frete"));
+                pedido.setNomeDoDestinatario(row.getString("NomeDoDestinatario"));
+                pedido.setEnderecoDoDestinatario(row.getString("EnderecoDoDestinatario"));
+                pedido.setCidadeDeDestino(row.getString("CidadeDeDestino"));
+                pedido.setRegiaoDeDestino(row.getString("RegiaoDeDestino"));
+                pedido.setCepDeDestino(row.getString("CEPdeDestino"));
+                pedido.setPaisDeDestino(row.getString("PaisDeDestino"));
+                listaPedido.put(pedido.getNumeroDoPedido(), pedido);
+                
+                detalhesPedido = new DetalhesPedido();
+                detalhesPedido.setPedido(pedido);
+                detalhesPedido.setProduto(produto);
+                detalhesPedido.setPrecoUnitario(row.getBigDecimal("Detalhes_Pedido_PrecoUnitario"));
+                detalhesPedido.setQuantidade(row.getShort("Quantidade"));
+                detalhesPedido.setDesconto(row.getFloat("Desconto"));
+                int keyDetalhePedido = Integer.parseInt(
+                        String.valueOf(pedido.getNumeroDoPedido())+
+                        String.valueOf(produto.getIdProduto()));                
+                listaDetalhesPedido.put(keyDetalhePedido, detalhesPedido);
+                detalhesPedido.setIdDetalhe(keyDetalhePedido);
             }
 
             try {
-
+                
                 //Grava dos dados no banco
                 //Categoria
                 servicoCategoria = new ServicoCategoria(bancoDados);
@@ -198,12 +237,40 @@ public class Minerar {
                 //Grava os empregados com os supervisores
                 servicoEmpregado = new ServicoEmpregado(bancoDados);
                 servicoEmpregado.criarLista(listaEmpregado.values());
+                                
 
+//                //Atribui detalhes_do_pedido no pedido e no produto.                
+//                for (Map.Entry<Integer, DetalhesPedido> entrySet : listaDetalhesPedido.entrySet()) {
+//                    //Detralhes do pedido
+//                    Integer key = entrySet.getKey();
+//                    DetalhesPedido value = entrySet.getValue();
+//
+//                    //Adiciona lista de detalhes no produto
+//                    produto = listaProduto.get(value.getProduto().getIdProduto());
+//                    produto.addDetalhesPedido(value);
+//                    listaProduto.put(produto.getIdProduto(), produto);
+//                    
+//                    //Adiciona lista de detralhes no pedido
+//                    pedido = listaPedido.get(value.getPedido().getNumeroDoPedido());
+//                    pedido.addDetalhesPedido(value);
+//                    listaPedido.put(pedido.getNumeroDoPedido(), pedido);                    
+//                }
+                
                 //Produto
                 servicoProduto = new ServicoProduto(bancoDados);
                 servicoProduto.criarLista(listaProduto.values());
-
+                
+                //Pedidos
+                servicoPedido = new ServicoPedido(bancoDados);
+                servicoPedido.criarLista(listaPedido.values());
+                
+                //Detalhes do Pedido
+                servicoDetalhesPedido = new ServicoDetalhesPedido(bancoDados);
+                servicoDetalhesPedido.criarLista(listaDetalhesPedido.values());
+                
+                
             } catch (Exception ex) {
+                ex.printStackTrace();
                 Logger.getLogger(Minerar.class.getName()).log(Level.SEVERE, null, ex);
             }
 

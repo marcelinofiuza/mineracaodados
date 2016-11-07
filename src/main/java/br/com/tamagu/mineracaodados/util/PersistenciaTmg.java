@@ -51,7 +51,8 @@ public class PersistenciaTmg implements Serializable {
             }
 
         } catch (Exception e) {
-
+            
+            e.printStackTrace();
             conexao.rollBackTransaction();
             throw new Exception(e.getMessage());
 

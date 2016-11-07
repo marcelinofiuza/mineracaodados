@@ -7,11 +7,16 @@ package br.com.tamagu.mineracaodados.entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.Column;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -36,6 +41,9 @@ public class Produto implements Serializable {
     private int nivelDeReposicao;
     private Boolean descontinuado;
 
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "produto")
+//    private List<DetalhesPedido> detalhesPedido;
+    
     public int getIdProduto() {
         return idProduto;
     }
@@ -116,4 +124,18 @@ public class Produto implements Serializable {
         this.descontinuado = descontinuado;
     }
         
+//    public List<DetalhesPedido> getDetalhesPedido() {
+//        return detalhesPedido;
+//    }
+//
+//    public void setDetalhesPedido(List<DetalhesPedido> detalhesPedido) {
+//        this.detalhesPedido = detalhesPedido;
+//    }
+//    
+//    public void addDetalhesPedido(DetalhesPedido detalhesPedido){
+//        if(this.detalhesPedido == null){
+//            this.detalhesPedido = new LinkedList<>();
+//        }
+//        this.detalhesPedido.add(detalhesPedido);
+//    }    
 }

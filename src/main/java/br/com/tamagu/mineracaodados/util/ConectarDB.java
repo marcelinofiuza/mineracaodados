@@ -40,6 +40,7 @@ public class ConectarDB {
         manager = factory.createEntityManager();
         transaction = manager.getTransaction();
         transaction.begin();
+        
     }
 
     public EntityManagerFactory getFactory() {
@@ -56,12 +57,15 @@ public class ConectarDB {
 
     public void rollBackTransaction() {
         transaction.rollback();
+        manager.clear();
+        manager.flush();        
         manager.close();
 //        factory.close();
     }
 
     public void endTransaction() {
         transaction.commit();
+        manager.clear();     
         manager.close();
 //        factory.close();
     }
